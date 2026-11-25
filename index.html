@@ -2,32 +2,58 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#7c2d12" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0f3d33" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Recipe Book" />
+  <meta name="apple-mobile-web-app-title" content="LedgerFlow" />
+  <title>LedgerFlow</title>
   <link rel="manifest" href="manifest.json" />
-  <title>My Recipe Book</title>
   <style>
     :root {
-      --bg: #faf6f0;
-      --surface: #ffffff;
-      --surface-alt: #f3ece2;
-      --text: #241914;
-      --muted: #6b574c;
-      --accent: #9a3412;
-      --accent-hover: #7c2d12;
-      --accent-soft: #ffedd5;
-      --border: #e5d8c8;
-      --danger: #b91c1c;
-      --danger-soft: #fee2e2;
-      --radius: 14px;
-      --shadow: 0 4px 16px rgba(36, 25, 20, 0.08);
+      --bg: #ece7dc;
+      --surface: #fdfbf6;
+      --surface-alt: #f4efe4;
+      --text: #182320;
+      --text-muted: #5b6d67;
+      --border: #d6cfc0;
+      --spine: #0f3d33;
+      --spine-light: #195b4c;
+      --accent: #059669;
+      --accent-bright: #10b981;
+      --pending: #d97706;
+      --pending-bg: #fef3c7;
+      --cleared: #059669;
+      --cleared-bg: #d1fae5;
+      --danger: #dc2626;
+      --danger-bg: #fee2e2;
+      --shadow: 0 6px 18px rgba(18, 36, 31, 0.08);
+      --radius: 16px;
+    }
+
+    body.dark {
+      --bg: #0c1412;
+      --surface: #14211e;
+      --surface-alt: #1a2a26;
+      --text: #edf4f2;
+      --text-muted: #93aba4;
+      --border: #253d37;
+      --spine: #09261f;
+      --spine-light: #13473b;
+      --accent: #10b981;
+      --accent-bright: #34d399;
+      --pending: #fbbf24;
+      --pending-bg: rgba(245, 158, 11, 0.16);
+      --cleared: #34d399;
+      --cleared-bg: rgba(16, 185, 129, 0.16);
+      --danger: #f87171;
+      --danger-bg: rgba(239, 68, 68, 0.16);
+      --shadow: 0 8px 22px rgba(0, 0, 0, 0.42);
     }
 
     * {
       box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
@@ -35,1166 +61,1358 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.5;
-      padding-bottom: 4rem;
+      line-height: 1.45;
+      padding-bottom: 92px;
     }
 
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      background: var(--accent);
-      color: #fff;
-      padding: 0.9rem 1rem;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.14);
+    .hero-header {
+      background: linear-gradient(165deg, #0b241e 0%, var(--spine) 62%, var(--spine-light) 100%);
+      color: #ffffff;
+      padding: 16px 16px 20px;
+      border-bottom-left-radius: 22px;
+      border-bottom-right-radius: 22px;
+      box-shadow: 0 8px 22px rgba(9, 38, 31, 0.25);
     }
 
-    .header-inner {
-      max-width: 980px;
-      margin: 0 auto;
+    .top-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 0.75rem;
+      gap: 10px;
+      margin-bottom: 14px;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
-      min-width: 0;
-    }
-
-    .brand h1 {
-      margin: 0;
-      font-size: 1.2rem;
+      gap: 9px;
       font-weight: 700;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      font-size: 1.18rem;
+      letter-spacing: -0.02em;
     }
 
-    .header-actions {
+    .brand-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--accent-bright);
+      box-shadow: 0 0 10px rgba(52, 211, 153, 0.85);
+    }
+
+    .top-actions {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      flex-shrink: 0;
+      gap: 8px;
     }
 
-    button {
-      font: inherit;
-      cursor: pointer;
-      border: 1px solid transparent;
-      border-radius: 10px;
-      padding: 0.55rem 0.85rem;
+    .pill-btn {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 999px;
+      padding: 7px 13px;
+      font-size: 0.84rem;
       font-weight: 600;
-      transition: background-color 0.15s ease, transform 0.08s ease;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
     }
 
-    button:active {
-      transform: scale(0.98);
+    .pill-btn.icon-only {
+      width: 36px;
+      height: 36px;
+      padding: 0;
+    }
+
+    .summary-glass {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      padding: 14px 16px;
+    }
+
+    .summary-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: rgba(255, 255, 255, 0.74);
+      font-weight: 700;
+    }
+
+    .summary-total {
+      font-size: 2.1rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin: 3px 0 12px;
+    }
+
+    .summary-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .split-item span {
+      display: block;
+      font-size: 0.76rem;
+      color: rgba(255, 255, 255, 0.76);
+    }
+
+    .split-item strong {
+      font-size: 1.02rem;
+      font-weight: 700;
+    }
+
+    .split-cleared { color: #34d399; }
+    .split-pending { color: #fbbf24; }
+
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 16px 12px;
+    }
+
+    /* Book Binding Layout with Side Index Tabs */
+    .book-shell {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      min-height: 460px;
+    }
+
+    .book-spine {
+      width: 10px;
+      flex-shrink: 0;
+      background: linear-gradient(180deg, #0b241e 0%, var(--spine) 50%, var(--spine-light) 100%);
+      border-top-left-radius: 14px;
+      border-bottom-left-radius: 14px;
+      box-shadow: inset -2px 0 5px rgba(0, 0, 0, 0.25);
+    }
+
+    .book-page {
+      flex: 1;
+      min-width: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: none;
+      border-top-right-radius: 16px;
+      border-bottom-right-radius: 16px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      position: relative;
+    }
+
+    .side-tabs {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      padding-top: 14px;
+      margin-left: -1px;
+      flex-shrink: 0;
+      max-width: 96px;
+    }
+
+    .side-tab {
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      background: var(--surface-alt);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      border-left: none;
+      border-top-right-radius: 12px;
+      border-bottom-right-radius: 12px;
+      padding: 10px 6px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      max-height: 118px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      box-shadow: 2px 3px 8px rgba(18, 36, 31, 0.07);
+      transition: transform 0.12s ease, background 0.12s ease, color 0.12s ease;
+    }
+
+    .side-tab.active {
+      background: var(--spine);
+      color: #ffffff;
+      border-color: var(--spine);
+      transform: translateX(3px);
+      box-shadow: 3px 4px 10px rgba(15, 61, 51, 0.22);
+    }
+
+    .side-tab.add-tab {
+      background: var(--accent-bg, rgba(16, 185, 129, 0.14));
+      color: var(--accent);
+      border-color: rgba(16, 185, 129, 0.35);
+      writing-mode: horizontal-tb;
+      max-height: none;
+      padding: 8px 6px;
+      text-align: center;
+      font-size: 0.85rem;
+      font-weight: 800;
+    }
+
+    .book-page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .book-title {
+      margin: 0 0 4px;
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .acct-meta {
+      display: inline-block;
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.76rem;
+      font-weight: 600;
+      padding: 2px 9px;
+      border-radius: 999px;
+    }
+
+    .book-balance-box {
+      text-align: right;
+    }
+
+    .book-balance-box strong {
+      display: block;
+      font-size: 1.35rem;
+      font-weight: 800;
+    }
+
+    .book-balance-box span {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    .page-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 8px;
+      text-align: center;
+      margin-bottom: 14px;
+    }
+
+    .page-stats div span {
+      display: block;
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    .page-stats div strong {
+      font-size: 0.95rem;
+    }
+
+    .page-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
     }
 
     .btn-primary {
-      background: #fff;
-      color: var(--accent);
-    }
-
-    .btn-primary:hover {
-      background: var(--accent-soft);
-    }
-
-    .btn-accent {
       background: var(--accent);
-      color: #fff;
-    }
-
-    .btn-accent:hover {
-      background: var(--accent-hover);
+      color: #ffffff;
+      border: none;
+      border-radius: 999px;
+      padding: 8px 15px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 3px 10px rgba(5, 150, 105, 0.24);
     }
 
     .btn-secondary {
       background: var(--surface-alt);
       color: var(--text);
-      border-color: var(--border);
-    }
-
-    .btn-secondary:hover {
-      background: #e9dfd1;
-    }
-
-    .btn-ghost {
-      background: rgba(255, 255, 255, 0.14);
-      color: #fff;
-      border-color: rgba(255, 255, 255, 0.25);
-    }
-
-    .btn-ghost:hover {
-      background: rgba(255, 255, 255, 0.24);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      padding: 8px 12px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
     }
 
     .btn-danger {
-      background: var(--danger-soft);
+      background: var(--danger-bg);
       color: var(--danger);
-      border-color: #fecaca;
+      border: 1px solid transparent;
+      border-radius: 11px;
+      padding: 8px 12px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
     }
 
-    .btn-danger:hover {
-      background: #fecaca;
-    }
-
-    .container {
-      max-width: 980px;
-      margin: 1.1rem auto 0;
-      padding: 0 1rem;
-    }
-
-    .controls {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 0.65rem;
-      margin-bottom: 0.85rem;
-    }
-
-    @media (max-width: 600px) {
-      .controls {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    input[type="text"],
-    input[type="search"],
-    select,
-    textarea {
-      width: 100%;
-      font: inherit;
-      color: var(--text);
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 0.65rem 0.75rem;
-    }
-
-    input:focus,
-    select:focus,
-    textarea:focus {
-      outline: 2px solid var(--accent);
-      outline-offset: 1px;
-    }
-
-    textarea {
-      min-height: 115px;
-      resize: vertical;
-    }
-
-    .status-bar {
+    .controls-bar {
       display: flex;
+      flex-direction: column;
+      gap: 9px;
+      margin-bottom: 14px;
+    }
+
+    .search-input, .form-control {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 11px;
+      border: 1px solid var(--border);
+      background: var(--surface-alt);
+      color: var(--text);
+      font-size: 0.94rem;
+      font-family: inherit;
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 6px;
       flex-wrap: wrap;
+    }
+
+    .chip {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface-alt);
+      color: var(--text-muted);
+      font-size: 0.79rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .chip.active {
+      background: var(--spine);
+      color: #ffffff;
+      border-color: var(--spine);
+    }
+
+    .tx-item {
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 12px 13px;
+      margin-bottom: 10px;
+    }
+
+    .tx-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .tx-payee {
+      font-weight: 700;
+      font-size: 0.97rem;
+      margin-bottom: 2px;
+    }
+
+    .tx-sub {
+      font-size: 0.79rem;
+      color: var(--text-muted);
+    }
+
+    .tx-right {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .tx-amt {
+      font-weight: 800;
+      font-size: 0.98rem;
+    }
+
+    .amt-pos { color: var(--cleared); }
+    .amt-neg { color: var(--text); }
+
+    .tx-run {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .tx-footer {
+      display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 0.5rem;
-      font-size: 0.88rem;
-      color: var(--muted);
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 0.6rem 0.85rem;
-      margin-bottom: 1rem;
-    }
-
-    .recipe-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(275px, 1fr));
-      gap: 1rem;
-    }
-
-    .recipe-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      box-shadow: var(--shadow);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .recipe-card img {
-      width: 100%;
-      height: 175px;
-      object-fit: cover;
-      background: var(--surface-alt);
-      display: block;
-    }
-
-    .recipe-card-body {
-      padding: 0.9rem;
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-    }
-
-    .badge {
-      display: inline-block;
-      align-self: flex-start;
-      background: var(--accent-soft);
-      color: var(--accent);
-      font-size: 0.76rem;
-      font-weight: 700;
-      padding: 0.2rem 0.55rem;
-      border-radius: 999px;
-      margin-bottom: 0.45rem;
-    }
-
-    .recipe-card h2 {
-      margin: 0 0 0.35rem;
-      font-size: 1.1rem;
-    }
-
-    .meta {
-      font-size: 0.85rem;
-      color: var(--muted);
-      margin-bottom: 0.75rem;
-    }
-
-    .card-footer {
-      margin-top: auto;
-      display: flex;
-      gap: 0.45rem;
+      gap: 8px;
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border);
       flex-wrap: wrap;
     }
 
-    .empty-state {
-      text-align: center;
-      background: var(--surface);
-      border: 1px dashed var(--border);
-      border-radius: var(--radius);
-      padding: 2.5rem 1.25rem;
-      color: var(--muted);
+    .status-badge {
+      border: none;
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
     }
 
-    /* Drawer / Menu */
-    .drawer-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.45);
-      z-index: 40;
-      display: none;
+    .status-cleared {
+      background: var(--cleared-bg);
+      color: var(--cleared);
     }
 
-    .drawer-backdrop.open {
-      display: block;
+    .status-pending {
+      background: var(--pending-bg);
+      color: var(--pending);
     }
 
-    .drawer {
-      position: fixed;
-      top: 0;
-      right: -320px;
-      width: 300px;
-      max-width: 85vw;
-      height: 100%;
-      background: var(--surface);
-      z-index: 50;
-      padding: 1.1rem;
-      box-shadow: -6px 0 24px rgba(0, 0, 0, 0.18);
-      transition: right 0.2s ease;
+    .tx-actions {
       display: flex;
-      flex-direction: column;
-      gap: 0.65rem;
-      overflow-y: auto;
+      align-items: center;
+      gap: 5px;
     }
 
-    .drawer.open {
-      right: 0;
+    .mini-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 5px 8px;
+      font-size: 0.77rem;
+      font-weight: 600;
+      cursor: pointer;
+      min-width: 29px;
     }
 
-    .drawer h3 {
-      margin: 0 0 0.25rem;
+    .mini-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
     }
 
-    .drawer-note {
-      font-size: 0.82rem;
-      color: var(--muted);
-      background: var(--surface-alt);
-      padding: 0.65rem;
-      border-radius: 10px;
+    .move-btn {
+      font-weight: 800;
+      padding: 5px 9px;
+    }
+
+    .hidden {
+      display: none !important;
     }
 
     /* Modals */
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.55);
-      z-index: 60;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-      overflow-y: auto;
-    }
-
-    .modal-backdrop.open {
+      background: rgba(8, 20, 17, 0.65);
       display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 1000;
+      padding: 12px;
     }
 
-    .modal {
+    @media (min-width: 600px) {
+      .modal-backdrop {
+        align-items: center;
+      }
+    }
+
+    .modal-box {
       background: var(--surface);
-      border-radius: var(--radius);
+      color: var(--text);
       width: 100%;
-      max-width: 640px;
+      max-width: 480px;
+      border-radius: 20px;
+      padding: 20px;
+      border: 1px solid var(--border);
       max-height: 90vh;
       overflow-y: auto;
-      padding: 1.2rem;
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
     }
 
-    .modal-header {
+    .modal-head {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      gap: 0.75rem;
-      margin-bottom: 1rem;
+      align-items: center;
+      margin-bottom: 14px;
     }
 
-    .modal-header h2 {
+    .modal-head h3 {
       margin: 0;
-      font-size: 1.2rem;
+      font-size: 1.08rem;
     }
 
     .form-group {
-      margin-bottom: 0.85rem;
+      margin-bottom: 12px;
     }
 
     .form-group label {
       display: block;
-      font-weight: 600;
-      font-size: 0.9rem;
-      margin-bottom: 0.3rem;
+      font-size: 0.79rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 5px;
     }
 
     .form-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
+      gap: 10px;
     }
 
-    @media (max-width: 560px) {
-      .form-row {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .photo-preview {
-      margin-top: 0.5rem;
-      display: none;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .photo-preview.visible {
-      display: flex;
-    }
-
-    .photo-preview img {
-      width: 96px;
-      height: 72px;
-      object-fit: cover;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-    }
-
-    .modal-footer {
+    .modal-actions {
       display: flex;
       justify-content: flex-end;
-      gap: 0.55rem;
-      margin-top: 1rem;
-      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
     }
 
-    .detail-photo {
-      width: 100%;
-      max-height: 300px;
-      object-fit: cover;
-      border-radius: 10px;
-      margin-bottom: 0.85rem;
+    .backup-section {
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 12px;
+      margin-bottom: 12px;
     }
 
-    .detail-section {
-      margin-top: 1rem;
-    }
-
-    .detail-section h3 {
-      margin: 0 0 0.45rem;
-      font-size: 1rem;
-      color: var(--accent);
-    }
-
-    .detail-section ul,
-    .detail-section ol {
-      margin: 0;
-      padding-left: 1.3rem;
-    }
-
-    .detail-section li {
-      margin-bottom: 0.35rem;
-    }
-
-    .toast {
-      position: fixed;
-      bottom: 1.1rem;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #241914;
-      color: #fff;
-      padding: 0.65rem 1rem;
-      border-radius: 999px;
+    .backup-section h4 {
+      margin: 0 0 5px;
       font-size: 0.9rem;
-      z-index: 80;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s ease;
     }
 
-    .toast.show {
-      opacity: 1;
+    .backup-section p {
+      margin: 0 0 10px;
+      font-size: 0.79rem;
+      color: var(--text-muted);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 26px 14px;
+      color: var(--text-muted);
+      background: var(--surface-alt);
+      border: 1px dashed var(--border);
+      border-radius: 14px;
+      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="header-inner">
+  <header class="hero-header">
+    <div class="top-bar">
       <div class="brand">
-        <span aria-hidden="true">🍳</span>
-        <h1>My Recipe Book</h1>
+        <span class="brand-dot"></span>
+        <span>LedgerFlow</span>
       </div>
-      <div class="header-actions">
-        <button type="button" class="btn-primary" id="openAddBtn">+ Add Recipe</button>
-        <button type="button" class="btn-ghost" id="openMenuBtn" aria-label="Open menu">☰</button>
+      <div class="top-actions">
+        <button type="button" class="pill-btn" id="openBackupBtn">Backup</button>
+        <button type="button" class="pill-btn icon-only" id="fullscreenBtn" title="Toggle Fullscreen" aria-label="Toggle Fullscreen">⛶</button>
+        <button type="button" class="pill-btn icon-only" id="themeBtn" title="Toggle Theme" aria-label="Toggle Theme">☾</button>
+      </div>
+    </div>
+
+    <div class="summary-glass">
+      <div class="summary-label">Total Net Balance (All Accounts)</div>
+      <div class="summary-total" id="globalLedger">$0.00</div>
+      <div class="summary-split">
+        <div class="split-item">
+          <span>Total Cleared</span>
+          <strong class="split-cleared" id="globalCleared">$0.00</strong>
+        </div>
+        <div class="split-item">
+          <span>Total Pending / Float</span>
+          <strong class="split-pending" id="globalPending">$0.00</strong>
+        </div>
       </div>
     </div>
   </header>
 
   <main class="container">
-    <div class="controls">
-      <input type="search" id="searchInput" placeholder="Search recipes, ingredients, or notes..." />
-      <select id="categoryFilter" aria-label="Filter by category">
-        <option value="All">All Categories</option>
-        <option value="Main Dishes">Main Dishes</option>
-        <option value="Side Dishes">Side Dishes</option>
-        <option value="Desserts">Desserts</option>
-        <option value="Breakfast">Breakfast</option>
-        <option value="Soups & Stews">Soups &amp; Stews</option>
-        <option value="Snacks & Appetizers">Snacks &amp; Appetizers</option>
-        <option value="Beverages">Beverages</option>
-        <option value="Other">Other</option>
-      </select>
-    </div>
+    <div class="book-shell">
+      <div class="book-spine" aria-hidden="true"></div>
 
-    <div class="status-bar">
-      <span id="recipeCountText">Loading recipes...</span>
-      <span id="storageInfoText">Storage: IndexedDB</span>
-    </div>
+      <section class="book-page">
+        <div class="book-page-header">
+          <div>
+            <h1 class="book-title" id="activeAccountName">Primary Checking</h1>
+            <span class="acct-meta" id="activeAccountMeta">Checking • 0 entries</span>
+          </div>
+          <div class="book-balance-box">
+            <strong id="activeLedger">$0.00</strong>
+            <span>Ledger Balance</span>
+          </div>
+        </div>
 
-    <div id="recipeGrid" class="recipe-grid"></div>
+        <div class="page-stats">
+          <div>
+            <span>Cleared Bank</span>
+            <strong id="activeCleared" class="amt-pos">$0.00</strong>
+          </div>
+          <div>
+            <span>Pending / Float</span>
+            <strong id="activePending" style="color:var(--pending);">$0.00</strong>
+          </div>
+          <div>
+            <span>Entries</span>
+            <strong id="activeCount">0</strong>
+          </div>
+        </div>
+
+        <div class="page-toolbar">
+          <button type="button" class="btn-secondary" id="editAccountBtn">Edit Account</button>
+          <button type="button" class="btn-primary" id="addTxBtn">+ New Entry</button>
+        </div>
+
+        <div class="controls-bar">
+          <input type="search" id="searchInput" class="search-input" placeholder="Search payee, check #, category, or notes..." />
+          <div class="filter-row" id="statusFilters">
+            <button type="button" class="chip active" data-filter="all">All</button>
+            <button type="button" class="chip" data-filter="cleared">Cleared</button>
+            <button type="button" class="chip" data-filter="pending">Pending</button>
+          </div>
+        </div>
+
+        <div id="txList"></div>
+      </section>
+
+      <nav class="side-tabs" id="sideTabs" aria-label="Account Tabs"></nav>
+    </div>
   </main>
 
-  <!-- Slide-out Menu -->
-  <div id="drawerBackdrop" class="drawer-backdrop"></div>
-  <aside id="menuDrawer" class="drawer" aria-label="Recipe menu">
-    <div class="modal-header">
-      <h3>Menu &amp; Backup</h3>
-      <button type="button" class="btn-secondary" id="closeMenuBtn">✕</button>
-    </div>
-    <button type="button" class="btn-accent" id="exportJsonBtn">Export JSON Backup</button>
-    <button type="button" class="btn-secondary" id="importJsonBtn">Import JSON Backup</button>
-    <input type="file" id="importFileInput" accept=".json,application/json" hidden />
-    <div class="drawer-note">
-      <strong>IndexedDB Storage:</strong> Recipes and compressed photos are stored locally in IndexedDB rather than the small <code>localStorage</code> limit. Still export a <code>.json</code> backup regularly to protect against clearing site data.
-    </div>
-  </aside>
-
-  <!-- Add / Edit Recipe Modal -->
-  <div id="formModalBackdrop" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="formModalTitle">
-    <div class="modal">
-      <div class="modal-header">
-        <h2 id="formModalTitle">Add Recipe</h2>
-        <button type="button" class="btn-secondary" id="closeFormModalBtn">✕</button>
+  <!-- Account Modal -->
+  <div id="accountModal" class="modal-backdrop hidden">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 id="accountModalTitle">Add Account Tab</h3>
+        <button type="button" class="mini-btn" data-close="accountModal">✕</button>
       </div>
-      <form id="recipeForm">
-        <input type="hidden" id="recipeIdInput" />
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="titleInput">Recipe Title *</label>
-            <input type="text" id="titleInput" required placeholder="e.g., Molten Chocolate Surprise" />
+      <form id="accountForm">
+        <input type="hidden" id="editAccountId" />
+        <div class="form-group">
+          <label for="acctNameInput">Account Name (Tab Label)</label>
+          <input type="text" id="acctNameInput" class="form-control" placeholder="e.g., U.S. Bank Checking" required />
+        </div>
+        <div class="form-group">
+          <label for="acctTypeInput">Account Type</label>
+          <select id="acctTypeInput" class="form-control">
+            <option value="Checking">Checking</option>
+            <option value="Savings">Savings</option>
+            <option value="Credit Card">Credit Card</option>
+            <option value="Cash">Cash</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="modal-actions" style="justify-content:space-between;">
+          <button type="button" id="deleteAccountBtn" class="btn-danger hidden">Delete Account</button>
+          <div style="display:flex; gap:8px; margin-left:auto;">
+            <button type="button" class="btn-secondary" data-close="accountModal">Cancel</button>
+            <button type="submit" class="btn-primary">Save Tab</button>
           </div>
-          <div class="form-group">
-            <label for="categoryInput">Category</label>
-            <select id="categoryInput">
-              <option value="Main Dishes">Main Dishes</option>
-              <option value="Side Dishes">Side Dishes</option>
-              <option value="Desserts">Desserts</option>
-              <option value="Breakfast">Breakfast</option>
-              <option value="Soups & Stews">Soups &amp; Stews</option>
-              <option value="Snacks & Appetizers">Snacks &amp; Appetizers</option>
-              <option value="Beverages">Beverages</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="metaInput">Time &amp; Yield</label>
-          <input type="text" id="metaInput" placeholder="e.g., 15 min prep · 28 min total · Makes 12 servings" />
-        </div>
-
-        <div class="form-group">
-          <label for="ingredientsInput">Ingredients (one per line)</label>
-          <textarea id="ingredientsInput" placeholder="4 squares semi-sweet baking chocolate&#10;1/2 cup (1 stick) butter"></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="instructionsInput">Instructions (one step per line)</label>
-          <textarea id="instructionsInput" placeholder="Heat the oven to 425°F.&#10;Microwave chocolate and butter until melted."></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="notesInput">Notes / Tips (optional)</label>
-          <textarea id="notesInput" style="min-height: 75px;" placeholder="Make-ahead tips, variations, or substitutions..."></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="photoInput">Photo (auto-compressed for fast saving)</label>
-          <input type="file" id="photoInput" accept="image/*" />
-          <div id="photoPreviewBox" class="photo-preview">
-            <img id="photoPreviewImg" alt="Recipe preview" />
-            <button type="button" class="btn-danger" id="removePhotoBtn">Remove Photo</button>
-          </div>
-        </div>
-
-        <div class="modal-footer">
-          <button type="button" class="btn-secondary" id="cancelFormBtn">Cancel</button>
-          <button type="submit" class="btn-accent" id="saveRecipeBtn">Save Recipe</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- View Recipe Modal -->
-  <div id="viewModalBackdrop" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="viewTitle">
-    <div class="modal">
-      <div class="modal-header">
-        <h2 id="viewTitle"></h2>
-        <button type="button" class="btn-secondary" id="closeViewModalBtn">✕</button>
+  <!-- Transaction Modal -->
+  <div id="txModal" class="modal-backdrop hidden">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 id="txModalTitle">New Entry</h3>
+        <button type="button" class="mini-btn" data-close="txModal">✕</button>
       </div>
-      <div id="viewBody"></div>
-      <div class="modal-footer">
-        <button type="button" class="btn-danger" id="deleteRecipeBtn">Delete</button>
-        <button type="button" class="btn-secondary" id="editRecipeBtn">Edit</button>
-        <button type="button" class="btn-accent" id="doneViewBtn">Close</button>
+      <form id="txForm">
+        <input type="hidden" id="editTxId" />
+        <div class="form-row">
+          <div class="form-group">
+            <label for="txTypeInput">Type</label>
+            <select id="txTypeInput" class="form-control">
+              <option value="withdrawal">Withdrawal / Check (-)</option>
+              <option value="deposit">Deposit / Credit (+)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="txAmountInput">Amount ($)</label>
+            <input type="number" step="0.01" min="0" id="txAmountInput" class="form-control" placeholder="0.00" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="txDateInput">Date</label>
+            <input type="date" id="txDateInput" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label for="txCheckInput">Check / Ref #</label>
+            <input type="text" id="txCheckInput" class="form-control" placeholder="e.g., 1042 or ACH" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="txPayeeInput">Payee / Description</label>
+          <input type="text" id="txPayeeInput" class="form-control" placeholder="e.g., Starting Balance, Electric Co." required />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="txCategoryInput">Category</label>
+            <input type="text" id="txCategoryInput" class="form-control" placeholder="e.g., Utilities, Payroll" />
+          </div>
+          <div class="form-group">
+            <label for="txStatusInput">Bank Status</label>
+            <select id="txStatusInput" class="form-control">
+              <option value="pending">Pending / Float</option>
+              <option value="cleared">Cleared Bank</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="txMemoInput">Memo / Notes (Optional)</label>
+          <input type="text" id="txMemoInput" class="form-control" placeholder="Optional note" />
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" data-close="txModal">Cancel</button>
+          <button type="submit" class="btn-primary">Save Entry</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Backup Modal -->
+  <div id="backupModal" class="modal-backdrop hidden">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3>Backup &amp; Restore</h3>
+        <button type="button" class="mini-btn" data-close="backupModal">✕</button>
+      </div>
+
+      <div class="backup-section">
+        <h4>Export Full Backup (JSON)</h4>
+        <p>Download all accounts and entries to move to another device or keep a safe local backup.</p>
+        <button type="button" class="btn-primary" id="exportJsonBtn">Download JSON Backup</button>
+      </div>
+
+      <div class="backup-section">
+        <h4>Restore From JSON Backup File</h4>
+        <p>Load a previously saved <code>.json</code> backup file. This replaces current local data.</p>
+        <input type="file" id="importJsonInput" accept=".json,application/json" class="form-control" />
+      </div>
+
+      <div class="backup-section">
+        <h4>Export Spreadsheet CSV</h4>
+        <p>Download all transactions in CSV format for Excel or Google Sheets.</p>
+        <button type="button" class="btn-secondary" id="exportCsvBtn">Download CSV</button>
       </div>
     </div>
   </div>
 
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
-
   <script>
-    const DB_NAME = 'RecipeBookDB';
-    const DB_VERSION = 1;
-    const STORE_NAME = 'recipes';
-    const LEGACY_STORAGE_KEYS = ['recipes', 'recipeBookRecipes', 'myRecipes'];
+    (function () {
+      const STORAGE_KEY = "ledgerflow_data_v1";
+      const THEME_KEY = "ledgerflow_theme_v1";
+      const ACTIVE_TAB_KEY = "ledgerflow_active_tab_v1";
 
-    let recipes = [];
-    let currentPhotoData = '';
-    let activeViewingId = null;
-
-    // DOM Elements
-    const recipeGrid = document.getElementById('recipeGrid');
-    const searchInput = document.getElementById('searchInput');
-    const categoryFilter = document.getElementById('categoryFilter');
-    const recipeCountText = document.getElementById('recipeCountText');
-    const storageInfoText = document.getElementById('storageInfoText');
-    const toastEl = document.getElementById('toast');
-
-    const drawerBackdrop = document.getElementById('drawerBackdrop');
-    const menuDrawer = document.getElementById('menuDrawer');
-    const openMenuBtn = document.getElementById('openMenuBtn');
-    const closeMenuBtn = document.getElementById('closeMenuBtn');
-    const exportJsonBtn = document.getElementById('exportJsonBtn');
-    const importJsonBtn = document.getElementById('importJsonBtn');
-    const importFileInput = document.getElementById('importFileInput');
-
-    const formModalBackdrop = document.getElementById('formModalBackdrop');
-    const formModalTitle = document.getElementById('formModalTitle');
-    const recipeForm = document.getElementById('recipeForm');
-    const openAddBtn = document.getElementById('openAddBtn');
-    const closeFormModalBtn = document.getElementById('closeFormModalBtn');
-    const cancelFormBtn = document.getElementById('cancelFormBtn');
-    const saveRecipeBtn = document.getElementById('saveRecipeBtn');
-
-    const recipeIdInput = document.getElementById('recipeIdInput');
-    const titleInput = document.getElementById('titleInput');
-    const categoryInput = document.getElementById('categoryInput');
-    const metaInput = document.getElementById('metaInput');
-    const ingredientsInput = document.getElementById('ingredientsInput');
-    const instructionsInput = document.getElementById('instructionsInput');
-    const notesInput = document.getElementById('notesInput');
-    const photoInput = document.getElementById('photoInput');
-    const photoPreviewBox = document.getElementById('photoPreviewBox');
-    const photoPreviewImg = document.getElementById('photoPreviewImg');
-    const removePhotoBtn = document.getElementById('removePhotoBtn');
-
-    const viewModalBackdrop = document.getElementById('viewModalBackdrop');
-    const viewTitle = document.getElementById('viewTitle');
-    const viewBody = document.getElementById('viewBody');
-    const closeViewModalBtn = document.getElementById('closeViewModalBtn');
-    const doneViewBtn = document.getElementById('doneViewBtn');
-    const editRecipeBtn = document.getElementById('editRecipeBtn');
-    const deleteRecipeBtn = document.getElementById('deleteRecipeBtn');
-
-    function showToast(message) {
-      toastEl.textContent = message;
-      toastEl.classList.add('show');
-      clearTimeout(showToast._timer);
-      showToast._timer = setTimeout(() => {
-        toastEl.classList.remove('show');
-      }, 2600);
-    }
-
-    function escapeHtml(str) {
-      return String(str || '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-    }
-
-    function normalizeRecipe(raw) {
-      const ingredients = Array.isArray(raw.ingredients)
-        ? raw.ingredients.map((item) => String(item).trim()).filter(Boolean)
-        : String(raw.ingredients || '')
-            .split(/\r?\n/)
-            .map((line) => line.trim())
-            .filter(Boolean);
-
-      const instructions = Array.isArray(raw.instructions)
-        ? raw.instructions.map((step) => String(step).trim()).filter(Boolean)
-        : String(raw.instructions || '')
-            .split(/\r?\n/)
-            .map((line) => line.trim())
-            .filter(Boolean);
-
-      return {
-        id: raw.id ? String(raw.id) : `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-        title: String(raw.title || 'Untitled Recipe').trim(),
-        category: String(raw.category || 'Other').trim(),
-        meta: String(raw.meta || '').trim(),
-        ingredients,
-        instructions,
-        notes: String(raw.notes || '').trim(),
-        photo: typeof raw.photo === 'string' ? raw.photo : '',
-        updatedAt: raw.updatedAt || Date.now()
+      let state = {
+        accounts: [],
+        transactions: []
       };
-    }
 
-    // IndexedDB helpers
-    function openRecipeDB() {
-      return new Promise((resolve, reject) => {
-        if (!('indexedDB' in window)) {
-          reject(new Error('IndexedDB is not supported in this browser.'));
-          return;
-        }
-        const request = indexedDB.open(DB_NAME, DB_VERSION);
-        request.onupgradeneeded = (event) => {
-          const db = event.target.result;
-          if (!db.objectStoreNames.contains(STORE_NAME)) {
-            db.createObjectStore(STORE_NAME, { keyPath: 'id' });
-          }
-        };
-        request.onsuccess = () => resolve(request.result);
-        request.onerror = () => reject(request.error);
-      });
-    }
+      let activeAccountId = null;
+      let statusFilter = "all";
+      let searchQuery = "";
 
-    function getAllFromStore(db) {
-      return new Promise((resolve, reject) => {
-        const tx = db.transaction(STORE_NAME, 'readonly');
-        const store = tx.objectStore(STORE_NAME);
-        const req = store.getAll();
-        req.onsuccess = () => resolve(req.result || []);
-        req.onerror = () => reject(req.error);
-      });
-    }
-
-    function replaceAllInStore(db, items) {
-      return new Promise((resolve, reject) => {
-        const tx = db.transaction(STORE_NAME, 'readwrite');
-        const store = tx.objectStore(STORE_NAME);
-        const clearReq = store.clear();
-
-        clearReq.onsuccess = () => {
-          for (const item of items) {
-            store.put(item);
-          }
-        };
-
-        tx.oncomplete = () => resolve();
-        tx.onerror = () => reject(tx.error);
-        tx.onabort = () => reject(tx.error);
-      });
-    }
-
-    function readLegacyLocalStorage() {
-      for (const key of LEGACY_STORAGE_KEYS) {
-        try {
-          const raw = localStorage.getItem(key);
-          if (!raw) continue;
-          const parsed = JSON.parse(raw);
-          const list = Array.isArray(parsed)
-            ? parsed
-            : Array.isArray(parsed?.recipes)
-              ? parsed.recipes
-              : null;
-          if (list && list.length > 0) {
-            return list.map(normalizeRecipe);
-          }
-        } catch (err) {
-          console.warn('Could not read localStorage key:', key, err);
-        }
-      }
-      return [];
-    }
-
-    async function loadRecipesFromStorage() {
-      const legacyList = readLegacyLocalStorage();
-      try {
-        const db = await openRecipeDB();
-        const dbList = await getAllFromStore(db);
-
-        if (dbList.length === 0 && legacyList.length > 0) {
-          await replaceAllInStore(db, legacyList);
-          showToast(`Migrated ${legacyList.length} recipe(s) to IndexedDB`);
-          return legacyList;
-        }
-
-        return dbList.map(normalizeRecipe);
-      } catch (err) {
-        console.warn('IndexedDB load failed, using localStorage fallback:', err);
-        storageInfoText.textContent = 'Storage: localStorage fallback';
-        return legacyList;
-      }
-    }
-
-    async function saveRecipesToStorage(list) {
-      const normalized = list.map(normalizeRecipe);
-      try {
-        const db = await openRecipeDB();
-        await replaceAllInStore(db, normalized);
-        storageInfoText.textContent = 'Storage: IndexedDB';
-        return true;
-      } catch (err) {
-        console.warn('IndexedDB save failed, trying localStorage fallback:', err);
-        try {
-          localStorage.setItem(LEGACY_STORAGE_KEYS[0], JSON.stringify(normalized));
-          storageInfoText.textContent = 'Storage: localStorage fallback';
-          return true;
-        } catch (fallbackErr) {
-          console.error('Save failed:', fallbackErr);
-          alert('Could not save recipe due to storage limits. Try exporting a JSON backup first.');
-          return false;
-        }
-      }
-    }
-
-    async function updateStorageEstimate() {
-      if (navigator.storage && typeof navigator.storage.estimate === 'function') {
-        try {
-          const { usage = 0, quota = 0 } = await navigator.storage.estimate();
-          const usedMB = (usage / (1024 * 1024)).toFixed(1);
-          const quotaMB = quota ? Math.round(quota / (1024 * 1024)) : null;
-          storageInfoText.textContent = quotaMB
-            ? `IndexedDB: ${usedMB} MB used of ~${quotaMB} MB`
-            : `IndexedDB: ${usedMB} MB used`;
-        } catch {
-          storageInfoText.textContent = 'Storage: IndexedDB';
-        }
-      }
-    }
-
-    // Photo compression
-    function compressImageFile(file, maxDimension = 1000, quality = 0.78) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onerror = () => reject(new Error('Could not read image file'));
-        reader.onload = () => {
-          const img = new Image();
-          img.onerror = () => reject(new Error('Invalid image file'));
-          img.onload = () => {
-            let { width, height } = img;
-            if (width > maxDimension || height > maxDimension) {
-              if (width > height) {
-                height = Math.round((height * maxDimension) / width);
-                width = maxDimension;
-              } else {
-                width = Math.round((width * maxDimension) / height);
-                height = maxDimension;
-              }
-            }
-            const canvas = document.createElement('canvas');
-            canvas.width = width;
-            canvas.height = height;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, width, height);
-            resolve(canvas.toDataURL('image/jpeg', quality));
-          };
-          img.src = reader.result;
-        };
-        reader.readAsDataURL(file);
-      });
-    }
-
-    function setPhotoPreview(dataUrl) {
-      currentPhotoData = dataUrl || '';
-      if (currentPhotoData) {
-        photoPreviewImg.src = currentPhotoData;
-        photoPreviewBox.classList.add('visible');
-      } else {
-        photoPreviewImg.removeAttribute('src');
-        photoPreviewBox.classList.remove('visible');
-        photoInput.value = '';
-      }
-    }
-
-    // Rendering
-    function getFilteredRecipes() {
-      const q = searchInput.value.trim().toLowerCase();
-      const cat = categoryFilter.value;
-
-      return recipes
-        .filter((r) => {
-          const matchesCategory = cat === 'All' || r.category === cat;
-          if (!matchesCategory) return false;
-          if (!q) return true;
-
-          const haystack = [
-            r.title,
-            r.category,
-            r.meta,
-            r.notes,
-            ...(r.ingredients || []),
-            ...(r.instructions || [])
-          ]
-            .join(' ')
-            .toLowerCase();
-
-          return haystack.includes(q);
-        })
-        .sort((a, b) => a.title.localeCompare(b.title));
-    }
-
-    function renderRecipes() {
-      const filtered = getFilteredRecipes();
-      recipeCountText.textContent =
-        filtered.length === recipes.length
-          ? `${recipes.length} ${recipes.length === 1 ? 'recipe' : 'recipes'}`
-          : `Showing ${filtered.length} of ${recipes.length} recipes`;
-
-      if (filtered.length === 0) {
-        recipeGrid.innerHTML = `
-          <div class="empty-state" style="grid-column: 1 / -1;">
-            <p><strong>No recipes found.</strong></p>
-            <p>${recipes.length === 0 ? 'Tap "+ Add Recipe" to start your collection.' : 'Try clearing your search or category filter.'}</p>
-          </div>
-        `;
-        return;
+      function uid() {
+        return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
       }
 
-      recipeGrid.innerHTML = filtered
-        .map(
-          (r) => `
-          <article class="recipe-card">
-            ${r.photo ? `<img src="${escapeHtml(r.photo)}" alt="${escapeHtml(r.title)}" loading="lazy" />` : ''}
-            <div class="recipe-card-body">
-              <span class="badge">${escapeHtml(r.category)}</span>
-              <h2>${escapeHtml(r.title)}</h2>
-              <div class="meta">${escapeHtml(r.meta || `${r.ingredients.length} ingredients`)}</div>
-              <div class="card-footer">
-                <button type="button" class="btn-accent" onclick="openViewModal('${escapeHtml(r.id)}')">View Recipe</button>
-                <button type="button" class="btn-secondary" onclick="openEditModal('${escapeHtml(r.id)}')">Edit</button>
-              </div>
-            </div>
-          </article>
-        `
-        )
-        .join('');
-    }
-
-    // Drawer controls
-    function setDrawerOpen(open) {
-      menuDrawer.classList.toggle('open', open);
-      drawerBackdrop.classList.toggle('open', open);
-    }
-
-    openMenuBtn.addEventListener('click', () => setDrawerOpen(true));
-    closeMenuBtn.addEventListener('click', () => setDrawerOpen(false));
-    drawerBackdrop.addEventListener('click', () => setDrawerOpen(false));
-
-    // Form Modal controls
-    function openAddModal() {
-      formModalTitle.textContent = 'Add Recipe';
-      recipeForm.reset();
-      recipeIdInput.value = '';
-      setPhotoPreview('');
-      formModalBackdrop.classList.add('open');
-      titleInput.focus();
-    }
-
-    window.openEditModal = function (id) {
-      const target = recipes.find((r) => r.id === id);
-      if (!target) return;
-
-      closeViewModal();
-      formModalTitle.textContent = 'Edit Recipe';
-      recipeIdInput.value = target.id;
-      titleInput.value = target.title;
-      categoryInput.value = target.category || 'Other';
-      metaInput.value = target.meta || '';
-      ingredientsInput.value = (target.ingredients || []).join('\n');
-      instructionsInput.value = (target.instructions || []).join('\n');
-      notesInput.value = target.notes || '';
-      setPhotoPreview(target.photo || '');
-      formModalBackdrop.classList.add('open');
-      titleInput.focus();
-    };
-
-    function closeFormModal() {
-      formModalBackdrop.classList.remove('open');
-    }
-
-    openAddBtn.addEventListener('click', openAddModal);
-    closeFormModalBtn.addEventListener('click', closeFormModal);
-    cancelFormBtn.addEventListener('click', closeFormModal);
-    removePhotoBtn.addEventListener('click', () => setPhotoPreview(''));
-
-    photoInput.addEventListener('change', async () => {
-      const file = photoInput.files && photoInput.files[0];
-      if (!file) return;
-      try {
-        saveRecipeBtn.disabled = true;
-        saveRecipeBtn.textContent = 'Compressing photo...';
-        const compressed = await compressImageFile(file);
-        setPhotoPreview(compressed);
-        showToast('Photo compressed');
-      } catch (err) {
-        console.error(err);
-        alert('Could not process that photo. Try another image.');
-      } finally {
-        saveRecipeBtn.disabled = false;
-        saveRecipeBtn.textContent = 'Save Recipe';
-      }
-    });
-
-    recipeForm.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      const title = titleInput.value.trim();
-      if (!title) {
-        alert('Please enter a recipe title.');
-        return;
+      function todayStr() {
+        const now = new Date();
+        const y = now.getFullYear();
+        const m = String(now.getMonth() + 1).padStart(2, "0");
+        const d = String(now.getDate()).padStart(2, "0");
+        return `${y}-${m}-${d}`;
       }
 
-      saveRecipeBtn.disabled = true;
-      saveRecipeBtn.textContent = 'Saving...';
+      function formatMoney(val) {
+        const num = Number(val) || 0;
+        const abs = Math.abs(num).toLocaleString("en-US", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
+        return (num < 0 ? "-$" : "$") + abs;
+      }
 
-      try {
-        const existingId = recipeIdInput.value;
-        const recipeData = normalizeRecipe({
-          id: existingId || undefined,
-          title,
-          category: categoryInput.value,
-          meta: metaInput.value.trim(),
-          ingredients: ingredientsInput.value,
-          instructions: instructionsInput.value,
-          notes: notesInput.value,
-          photo: currentPhotoData,
-          updatedAt: Date.now()
+      function normalizeOrders() {
+        const byAcct = {};
+        state.transactions.forEach(t => {
+          if (!byAcct[t.accountId]) byAcct[t.accountId] = [];
+          byAcct[t.accountId].push(t);
         });
 
-        if (existingId) {
-          const idx = recipes.findIndex((r) => r.id === existingId);
-          if (idx >= 0) {
-            recipes[idx] = recipeData;
-          } else {
-            recipes.push(recipeData);
+        Object.values(byAcct).forEach(list => {
+          list.sort((a, b) => {
+            const aHas = typeof a.sortOrder === "number";
+            const bHas = typeof b.sortOrder === "number";
+            if (aHas && bHas && a.sortOrder !== b.sortOrder) return a.sortOrder - b.sortOrder;
+            if (a.date !== b.date) return a.date.localeCompare(b.date);
+            return (a.createdAt || 0) - (b.createdAt || 0);
+          });
+          list.forEach((t, idx) => {
+            t.sortOrder = idx + 1;
+          });
+        });
+      }
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed.accounts) && Array.isArray(parsed.transactions)) {
+              state = parsed;
+            }
           }
+        } catch (e) {
+          console.error("Failed to read storage:", e);
+        }
+
+        if (state.accounts.length === 0) {
+          state.accounts.push({
+            id: "acct_default",
+            name: "Primary Checking",
+            type: "Checking",
+            createdAt: Date.now()
+          });
+        }
+
+        const savedTab = localStorage.getItem(ACTIVE_TAB_KEY);
+        if (savedTab && state.accounts.some(a => a.id === savedTab)) {
+          activeAccountId = savedTab;
         } else {
-          recipes.push(recipeData);
+          activeAccountId = state.accounts[0].id;
         }
 
-        const saved = await saveRecipesToStorage(recipes);
-        if (saved) {
-          renderRecipes();
-          await updateStorageEstimate();
-          closeFormModal();
-          showToast(existingId ? 'Recipe updated' : 'Recipe saved');
+        normalizeOrders();
+        saveState();
+      }
+
+      function saveState() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+          if (activeAccountId) {
+            localStorage.setItem(ACTIVE_TAB_KEY, activeAccountId);
+          }
+        } catch (e) {
+          alert("Could not save data locally. Please check browser storage permissions.");
         }
-      } finally {
-        saveRecipeBtn.disabled = false;
-        saveRecipeBtn.textContent = 'Save Recipe';
       }
-    });
 
-    // View Modal controls
-    window.openViewModal = function (id) {
-      const recipe = recipes.find((r) => r.id === id);
-      if (!recipe) return;
-      activeViewingId = recipe.id;
-
-      viewTitle.textContent = recipe.title;
-      const ingredientsHtml = recipe.ingredients.length
-        ? `<ul>${recipe.ingredients.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`
-        : '<p>No ingredients listed.</p>';
-
-      const instructionsHtml = recipe.instructions.length
-        ? `<ol>${recipe.instructions.map((step) => `<li>${escapeHtml(step)}</li>`).join('')}</ol>`
-        : '<p>No instructions listed.</p>';
-
-      const notesHtml = recipe.notes
-        ? `<div class="detail-section"><h3>Notes &amp; Tips</h3><p>${escapeHtml(recipe.notes).replace(/\n/g, '<br>')}</p></div>`
-        : '';
-
-      viewBody.innerHTML = `
-        <span class="badge">${escapeHtml(recipe.category)}</span>
-        ${recipe.meta ? `<div class="meta">${escapeHtml(recipe.meta)}</div>` : ''}
-        ${recipe.photo ? `<img class="detail-photo" src="${escapeHtml(recipe.photo)}" alt="${escapeHtml(recipe.title)}" />` : ''}
-        <div class="detail-section">
-          <h3>Ingredients</h3>
-          ${ingredientsHtml}
-        </div>
-        <div class="detail-section">
-          <h3>Instructions</h3>
-          ${instructionsHtml}
-        </div>
-        ${notesHtml}
-      `;
-
-      viewModalBackdrop.classList.add('open');
-    };
-
-    function closeViewModal() {
-      viewModalBackdrop.classList.remove('open');
-      activeViewingId = null;
-    }
-
-    closeViewModalBtn.addEventListener('click', closeViewModal);
-    doneViewBtn.addEventListener('click', closeViewModal);
-
-    editRecipeBtn.addEventListener('click', () => {
-      if (activeViewingId) {
-        window.openEditModal(activeViewingId);
+      function getChronologicalAccountTx(accountId) {
+        return state.transactions
+          .filter(t => t.accountId === accountId)
+          .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
       }
-    });
 
-    deleteRecipeBtn.addEventListener('click', async () => {
-      if (!activeViewingId) return;
-      const target = recipes.find((r) => r.id === activeViewingId);
-      const label = target ? target.title : 'this recipe';
-      if (!confirm(`Delete "${label}"?`)) return;
+      function moveTransaction(txId, visualDirection) {
+        const displayList = getChronologicalAccountTx(activeAccountId).reverse();
+        const idx = displayList.findIndex(t => t.id === txId);
+        if (idx === -1) return;
 
-      recipes = recipes.filter((r) => r.id !== activeViewingId);
-      const saved = await saveRecipesToStorage(recipes);
-      if (saved) {
-        renderRecipes();
-        await updateStorageEstimate();
-        closeViewModal();
-        showToast('Recipe deleted');
+        const targetIdx = idx + visualDirection;
+        if (targetIdx < 0 || targetIdx >= displayList.length) return;
+
+        const currentTx = displayList[idx];
+        const neighborTx = displayList[targetIdx];
+
+        const tempOrder = currentTx.sortOrder;
+        currentTx.sortOrder = neighborTx.sortOrder;
+        neighborTx.sortOrder = tempOrder;
+
+        normalizeOrders();
+        saveState();
+        renderBook();
       }
-    });
 
-    // Export / Import JSON
-    exportJsonBtn.addEventListener('click', () => {
-      const payload = {
-        app: 'My Recipe Book',
-        exportedAt: new Date().toISOString(),
-        recipes
-      };
-      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      const dateStr = new Date().toISOString().slice(0, 10);
-      link.href = url;
-      link.download = `recipes-backup-${dateStr}.json`;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      URL.revokeObjectURL(url);
-      setDrawerOpen(false);
-      showToast('Backup exported');
-    });
+      function computeAccountStats(accountId) {
+        const txs = getChronologicalAccountTx(accountId);
+        let ledger = 0;
+        let cleared = 0;
+        let pending = 0;
 
-    importJsonBtn.addEventListener('click', () => {
-      importFileInput.click();
-    });
+        txs.forEach(t => {
+          const signed = t.type === "deposit" ? Math.abs(Number(t.amount)) : -Math.abs(Number(t.amount));
+          ledger += signed;
+          if (t.status === "cleared") {
+            cleared += signed;
+          } else {
+            pending += signed;
+          }
+        });
 
-    importFileInput.addEventListener('change', async () => {
-      const file = importFileInput.files && importFileInput.files[0];
-      if (!file) return;
+        return { ledger, cleared, pending, count: txs.length };
+      }
 
-      try {
-        const text = await file.text();
-        const parsed = JSON.parse(text);
-        const importedList = Array.isArray(parsed)
-          ? parsed
-          : Array.isArray(parsed?.recipes)
-            ? parsed.recipes
-            : null;
+      function renderGlobalSummary() {
+        let totalLedger = 0;
+        let totalCleared = 0;
+        let totalPending = 0;
 
-        if (!importedList) {
-          alert('That JSON file does not contain a valid recipes list.');
+        state.accounts.forEach(acct => {
+          const s = computeAccountStats(acct.id);
+          totalLedger += s.ledger;
+          totalCleared += s.cleared;
+          totalPending += s.pending;
+        });
+
+        document.getElementById("globalLedger").textContent = formatMoney(totalLedger);
+        document.getElementById("globalCleared").textContent = formatMoney(totalCleared);
+        document.getElementById("globalPending").textContent = formatMoney(totalPending);
+      }
+
+      function renderSideTabs() {
+        const tabsEl = document.getElementById("sideTabs");
+        tabsEl.innerHTML = "";
+
+        state.accounts.forEach(acct => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "side-tab" + (acct.id === activeAccountId ? " active" : "");
+          btn.textContent = acct.name;
+          btn.title = `${acct.name} (${acct.type})`;
+          btn.addEventListener("click", () => {
+            activeAccountId = acct.id;
+            statusFilter = "all";
+            searchQuery = "";
+            document.getElementById("searchInput").value = "";
+            document.querySelectorAll("#statusFilters .chip").forEach(c => {
+              c.classList.toggle("active", c.dataset.filter === "all");
+            });
+            saveState();
+            renderBook();
+          });
+          tabsEl.appendChild(btn);
+        });
+
+        const addBtn = document.createElement("button");
+        addBtn.type = "button";
+        addBtn.className = "side-tab add-tab";
+        addBtn.textContent = "+";
+        addBtn.title = "Add Account Tab";
+        addBtn.setAttribute("aria-label", "Add Account Tab");
+        addBtn.addEventListener("click", () => openAccountModal());
+        tabsEl.appendChild(addBtn);
+      }
+
+      function renderBook() {
+        if (!state.accounts.some(a => a.id === activeAccountId)) {
+          activeAccountId = state.accounts[0]?.id || null;
+        }
+
+        renderGlobalSummary();
+        renderSideTabs();
+
+        const acct = state.accounts.find(a => a.id === activeAccountId);
+        if (!acct) return;
+
+        const stats = computeAccountStats(acct.id);
+        document.getElementById("activeAccountName").textContent = acct.name;
+        document.getElementById("activeAccountMeta").textContent = `${acct.type} • ${stats.count} ${stats.count === 1 ? "entry" : "entries"}`;
+        document.getElementById("activeLedger").textContent = formatMoney(stats.ledger);
+        document.getElementById("activeCleared").textContent = formatMoney(stats.cleared);
+        document.getElementById("activePending").textContent = formatMoney(stats.pending);
+        document.getElementById("activeCount").textContent = String(stats.count);
+
+        const chronological = getChronologicalAccountTx(acct.id);
+        let running = 0;
+        const withRunning = chronological.map(t => {
+          const signed = t.type === "deposit" ? Math.abs(Number(t.amount)) : -Math.abs(Number(t.amount));
+          running += signed;
+          return { ...t, signed, runningBalance: running };
+        });
+
+        const displayAll = withRunning.slice().reverse();
+        const q = searchQuery.trim().toLowerCase();
+        const canReorder = statusFilter === "all" && q === "";
+
+        const filtered = displayAll.filter(t => {
+          if (statusFilter !== "all" && t.status !== statusFilter) return false;
+          if (!q) return true;
+          return (
+            (t.payee && t.payee.toLowerCase().includes(q)) ||
+            (t.checkNum && t.checkNum.toLowerCase().includes(q)) ||
+            (t.category && t.category.toLowerCase().includes(q)) ||
+            (t.memo && t.memo.toLowerCase().includes(q)) ||
+            (t.date && t.date.includes(q))
+          );
+        });
+
+        const txListEl = document.getElementById("txList");
+        txListEl.innerHTML = "";
+
+        if (filtered.length === 0) {
+          txListEl.innerHTML = `<div class="empty-state">No entries on this page yet. Tap <strong>+ New Entry</strong> to add a starting balance, deposit, check, or payment.</div>`;
           return;
         }
 
-        const normalizedImported = importedList.map(normalizeRecipe);
-        const mergeChoice = confirm(
-          `Found ${normalizedImported.length} recipe(s) in backup.\n\nClick OK to MERGE with existing recipes, or Cancel to REPLACE your current library.`
-        );
+        filtered.forEach((t, idx) => {
+          const item = document.createElement("div");
+          item.className = "tx-item";
+          const metaParts = [t.date];
+          if (t.checkNum) metaParts.push(`#${escapeHtml(t.checkNum)}`);
+          if (t.category) metaParts.push(escapeHtml(t.category));
 
-        if (mergeChoice) {
-          const map = new Map(recipes.map((r) => [r.id, r]));
-          for (const item of normalizedImported) {
-            if (map.has(item.id)) {
-              item.id = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+          const disableUp = !canReorder || idx === 0;
+          const disableDown = !canReorder || idx === filtered.length - 1;
+
+          item.innerHTML = `
+            <div class="tx-main">
+              <div>
+                <div class="tx-payee">${escapeHtml(t.payee)}</div>
+                <div class="tx-sub">${metaParts.join(" • ")}${t.memo ? " — " + escapeHtml(t.memo) : ""}</div>
+              </div>
+              <div class="tx-right">
+                <div class="tx-amt ${t.signed >= 0 ? "amt-pos" : "amt-neg"}">${t.signed >= 0 ? "+" : ""}${formatMoney(t.signed)}</div>
+                <div class="tx-run">Bal: ${formatMoney(t.runningBalance)}</div>
+              </div>
+            </div>
+            <div class="tx-footer">
+              <button type="button" class="status-badge ${t.status === "cleared" ? "status-cleared" : "status-pending"}">
+                ${t.status === "cleared" ? "✓ Cleared Bank" : "◷ Pending / Float"}
+              </button>
+              <div class="tx-actions">
+                <button type="button" class="mini-btn move-btn move-up" title="Move Up" aria-label="Move Up" ${disableUp ? "disabled" : ""}>↑</button>
+                <button type="button" class="mini-btn move-btn move-down" title="Move Down" aria-label="Move Down" ${disableDown ? "disabled" : ""}>↓</button>
+                <button type="button" class="mini-btn edit-tx">Edit</button>
+                <button type="button" class="mini-btn del-tx">Delete</button>
+              </div>
+            </div>
+          `;
+
+          item.querySelector(".status-badge").addEventListener("click", () => {
+            const target = state.transactions.find(x => x.id === t.id);
+            if (target) {
+              target.status = target.status === "cleared" ? "pending" : "cleared";
+              target.updatedAt = Date.now();
+              saveState();
+              renderBook();
             }
-            map.set(item.id, item);
-          }
-          recipes = Array.from(map.values());
-        } else {
-          recipes = normalizedImported;
-        }
+          });
 
-        const saved = await saveRecipesToStorage(recipes);
-        if (saved) {
-          renderRecipes();
-          await updateStorageEstimate();
-          setDrawerOpen(false);
-          showToast('Backup imported');
-        }
-      } catch (err) {
-        console.error(err);
-        alert('Could not read or import that JSON file.');
-      } finally {
-        importFileInput.value = '';
+          item.querySelector(".move-up").addEventListener("click", () => moveTransaction(t.id, -1));
+          item.querySelector(".move-down").addEventListener("click", () => moveTransaction(t.id, 1));
+          item.querySelector(".edit-tx").addEventListener("click", () => openTxModal(t));
+          item.querySelector(".del-tx").addEventListener("click", () => {
+            if (confirm(`Delete "${t.payee}"?`)) {
+              state.transactions = state.transactions.filter(x => x.id !== t.id);
+              normalizeOrders();
+              saveState();
+              renderBook();
+            }
+          });
+
+          txListEl.appendChild(item);
+        });
       }
-    });
 
-    // Search & filter listeners
-    searchInput.addEventListener('input', renderRecipes);
-    categoryFilter.addEventListener('change', renderRecipes);
+      function openAccountModal(acct = null) {
+        document.getElementById("accountModalTitle").textContent = acct ? "Edit Account Tab" : "Add Account Tab";
+        document.getElementById("editAccountId").value = acct ? acct.id : "";
+        document.getElementById("acctNameInput").value = acct ? acct.name : "";
+        document.getElementById("acctTypeInput").value = acct ? acct.type : "Checking";
 
-    // Initialize app
-    (async function init() {
-      recipes = await loadRecipesFromStorage();
-      renderRecipes();
-      await updateStorageEstimate();
+        const delBtn = document.getElementById("deleteAccountBtn");
+        if (acct && state.accounts.length > 1) {
+          delBtn.classList.remove("hidden");
+        } else {
+          delBtn.classList.add("hidden");
+        }
+
+        document.getElementById("accountModal").classList.remove("hidden");
+      }
+
+      function openTxModal(tx = null) {
+        document.getElementById("txModalTitle").textContent = tx ? "Edit Entry" : "New Entry";
+        document.getElementById("editTxId").value = tx ? tx.id : "";
+        document.getElementById("txTypeInput").value = tx ? tx.type : "withdrawal";
+        document.getElementById("txAmountInput").value = tx ? tx.amount : "";
+        document.getElementById("txDateInput").value = tx ? tx.date : todayStr();
+        document.getElementById("txCheckInput").value = tx ? (tx.checkNum || "") : "";
+        document.getElementById("txPayeeInput").value = tx ? tx.payee : "";
+        document.getElementById("txCategoryInput").value = tx ? (tx.category || "") : "";
+        document.getElementById("txStatusInput").value = tx ? tx.status : "pending";
+        document.getElementById("txMemoInput").value = tx ? (tx.memo || "") : "";
+        document.getElementById("txModal").classList.remove("hidden");
+      }
+
+      function escapeHtml(str) {
+        return String(str || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      document.getElementById("editAccountBtn").addEventListener("click", () => {
+        const acct = state.accounts.find(a => a.id === activeAccountId);
+        if (acct) openAccountModal(acct);
+      });
+
+      document.getElementById("addTxBtn").addEventListener("click", () => openTxModal());
+
+      document.getElementById("accountForm").addEventListener("submit", e => {
+        e.preventDefault();
+        const id = document.getElementById("editAccountId").value;
+        const name = document.getElementById("acctNameInput").value.trim();
+        const type = document.getElementById("acctTypeInput").value;
+        if (!name) return;
+
+        if (id) {
+          const acct = state.accounts.find(a => a.id === id);
+          if (acct) {
+            acct.name = name;
+            acct.type = type;
+          }
+        } else {
+          const newAcct = {
+            id: uid(),
+            name,
+            type,
+            createdAt: Date.now()
+          };
+          state.accounts.push(newAcct);
+          activeAccountId = newAcct.id;
+        }
+        saveState();
+        document.getElementById("accountModal").classList.add("hidden");
+        renderBook();
+      });
+
+      document.getElementById("deleteAccountBtn").addEventListener("click", () => {
+        const id = document.getElementById("editAccountId").value;
+        if (!id || state.accounts.length <= 1) return;
+        if (confirm("Delete this account tab and all of its entries?")) {
+          state.accounts = state.accounts.filter(a => a.id !== id);
+          state.transactions = state.transactions.filter(t => t.accountId !== id);
+          if (activeAccountId === id) {
+            activeAccountId = state.accounts[0].id;
+          }
+          saveState();
+          document.getElementById("accountModal").classList.add("hidden");
+          renderBook();
+        }
+      });
+
+      document.getElementById("txForm").addEventListener("submit", e => {
+        e.preventDefault();
+        const id = document.getElementById("editTxId").value;
+        const type = document.getElementById("txTypeInput").value;
+        const amount = parseFloat(document.getElementById("txAmountInput").value);
+        const date = document.getElementById("txDateInput").value;
+        const checkNum = document.getElementById("txCheckInput").value.trim();
+        const payee = document.getElementById("txPayeeInput").value.trim();
+        const category = document.getElementById("txCategoryInput").value.trim();
+        const status = document.getElementById("txStatusInput").value;
+        const memo = document.getElementById("txMemoInput").value.trim();
+
+        if (!payee || isNaN(amount) || !date) return;
+
+        const now = Date.now();
+        if (id) {
+          const tx = state.transactions.find(t => t.id === id);
+          if (tx) {
+            Object.assign(tx, {
+              type,
+              amount,
+              date,
+              checkNum,
+              payee,
+              category,
+              status,
+              memo,
+              updatedAt: now
+            });
+          }
+        } else {
+          const acctTxs = getChronologicalAccountTx(activeAccountId);
+          const maxOrder = acctTxs.reduce((m, t) => Math.max(m, t.sortOrder || 0), 0);
+          state.transactions.push({
+            id: uid(),
+            accountId: activeAccountId,
+            type,
+            amount,
+            date,
+            checkNum,
+            payee,
+            category,
+            status,
+            memo,
+            sortOrder: maxOrder + 1,
+            createdAt: now,
+            updatedAt: now
+          });
+        }
+
+        normalizeOrders();
+        saveState();
+        document.getElementById("txModal").classList.add("hidden");
+        renderBook();
+      });
+
+      document.getElementById("searchInput").addEventListener("input", e => {
+        searchQuery = e.target.value;
+        renderBook();
+      });
+
+      document.querySelectorAll("#statusFilters .chip").forEach(btn => {
+        btn.addEventListener("click", () => {
+          statusFilter = btn.dataset.filter;
+          document.querySelectorAll("#statusFilters .chip").forEach(c => c.classList.remove("active"));
+          btn.classList.add("active");
+          renderBook();
+        });
+      });
+
+      document.getElementById("openBackupBtn").addEventListener("click", () => {
+        document.getElementById("importJsonInput").value = "";
+        document.getElementById("backupModal").classList.remove("hidden");
+      });
+
+      document.getElementById("exportJsonBtn").addEventListener("click", () => {
+        const payload = {
+          app: "LedgerFlow",
+          exportedAt: new Date().toISOString(),
+          accounts: state.accounts,
+          transactions: state.transactions
+        };
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `ledgerflow-backup-${todayStr()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+
+      document.getElementById("importJsonInput").addEventListener("change", e => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = ev => {
+          try {
+            const parsed = JSON.parse(ev.target.result);
+            if (!Array.isArray(parsed.accounts) || !Array.isArray(parsed.transactions)) {
+              alert("Invalid LedgerFlow backup file.");
+              return;
+            }
+            if (confirm("Replace current local checkbook data with this backup?")) {
+              state = {
+                accounts: parsed.accounts,
+                transactions: parsed.transactions
+              };
+              activeAccountId = state.accounts[0]?.id || null;
+              normalizeOrders();
+              saveState();
+              document.getElementById("backupModal").classList.add("hidden");
+              renderBook();
+              alert("Backup restored successfully.");
+            }
+          } catch (err) {
+            alert("Could not read JSON file: " + err.message);
+          }
+        };
+        reader.readAsText(file);
+      });
+
+      document.getElementById("exportCsvBtn").addEventListener("click", () => {
+        const acctMap = {};
+        state.accounts.forEach(a => { acctMap[a.id] = a.name; });
+        const rows = [["Date", "Account", "Check/Ref", "Payee", "Category", "Type", "Status", "Amount", "Memo"]];
+        state.transactions.forEach(t => {
+          const signed = t.type === "deposit" ? Math.abs(Number(t.amount)) : -Math.abs(Number(t.amount));
+          rows.push([
+            t.date,
+            acctMap[t.accountId] || "",
+            t.checkNum || "",
+            t.payee || "",
+            t.category || "",
+            t.type,
+            t.status,
+            signed.toFixed(2),
+            t.memo || ""
+          ]);
+        });
+        const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(",")).join("
+");
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `ledgerflow-export-${todayStr()}.csv`;
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+
+      document.querySelectorAll("[data-close]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.getElementById(btn.dataset.close).classList.add("hidden");
+        });
+      });
+
+      function applyTheme(dark) {
+        document.body.classList.toggle("dark", dark);
+        document.getElementById("themeBtn").textContent = dark ? "☀" : "☾";
+      }
+
+      const savedDark = localStorage.getItem(THEME_KEY) === "dark";
+      applyTheme(savedDark);
+
+      document.getElementById("themeBtn").addEventListener("click", () => {
+        const isDark = !document.body.classList.contains("dark");
+        localStorage.setItem(THEME_KEY, isDark ? "dark" : "light");
+        applyTheme(isDark);
+      });
+
+      document.getElementById("fullscreenBtn").addEventListener("click", () => {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+          document.exitFullscreen().catch(() => {});
+        }
+      });
+
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("./sw.js").catch(() => {});
+        });
+      }
+
+      loadState();
+      renderBook();
     })();
   </script>
 </body>
