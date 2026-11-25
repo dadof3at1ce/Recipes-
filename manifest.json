@@ -1,0 +1,19 @@
+{
+  "name": "Family Recipe Book",
+  "short_name": "Recipes",
+  "description": "Portable Family Recipe Book with photos and JSON backup/import.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#faf7f2",
+  "theme_color": "#d97706",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
